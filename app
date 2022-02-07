@@ -21,9 +21,9 @@ from copied_code import add_doesnt_contain_letter_constraint, add_contains_lette
 from copied_code import add_exact_letter_position_constraint, add_letter_appears_once_constraint
 from copied_code import letter_to_index_map, index_to_letter_map
 
-def get_dominant_color(a):
+def get_dominant_color(letter_square):
 
-  img = Image.fromarray(a)
+  img = Image.fromarray(letter_square)
   dom_color = sorted(img.getcolors(2 ** 24), reverse = True)[0][1]
 
   return(dom_color)
@@ -79,8 +79,17 @@ def update_solver(word_info):
     elif letter_info[1] == "yellow":
       solver = add_contains_letter_constraint(solver, letter_vars, letter_info[0])
       solver = add_invalid_position_constraint(solver, letter_vars, letter_info[0], letter_info[2])
+      check_if_grey_before = f"letter_{letter_info[2]} != {letter_info[0]}"
+      new_constraints = [constraint for constraint in constraints if constraint.__repr__() != check_if_grey_before]
+      if len(constraints) != len(new_constraints): 
+        solver.reset()
+        solver.add(new_constraints)
     elif letter_info[1] == "gray": 
-      solver = add_doesnt_contain_letter_constraint(solver, letter_vars, letter_info[0])
+      constraints = solver.assertions() 
+      check_if_added = f"letter_{letter_info[2]} == {letter_info[0]}"
+      new_constraints = [constraint for constraint in constraints if constraint.__repr__() != check_if_added]
+      if len(constraints) == len(new_constraints): 
+        solver = add_doesnt_contain_letter_constraint(solver, letter_vars, letter_info[0])
 
   return(True)
   
@@ -108,7 +117,7 @@ for i in range(6):
     info = con.__repr__()
     match = re.search(" [0-9]{1,2}", info).group().strip()
     info = re.sub(match, index_to_letter_map[int(match)], info)
-    logger.info("{} {}".format(i, info))
+    logger.info("word_{}: {}".format(i, info))
   
   pyautogui.write(guess) 
   pyautogui.press('enter')

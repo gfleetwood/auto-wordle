@@ -4,4 +4,4 @@ Automating a Wordle clone with Z3. This was a exploratory/learning exercise. Cop
 
 https://typon.github.io/wordle.html
 
-Hence the aptly named copied_code.py.
+Hence the aptly named copied_code.py. The app also does logging to show how the solver is adding contraints.
