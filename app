@@ -39,9 +39,9 @@ def euclidean_distance(p1, p2):
 def get_color(letter_square):
 
   color = get_dominant_color(letter_square)
-  dists = [euclidean_distance(color, x[1]) for x in COLORS]
+  dists = [euclidean_distance(color, x[1]) for x in wordle_colors]
   closest_color_index = dists.index(min(dists))
-  closest_color = COLORS[closest_color_index][0]
+  closest_color = wordle_colors[closest_color_index][0]
 
   return(closest_color)
 
@@ -95,7 +95,7 @@ def update_solver(word_info):
 
   return(True)
   
-COLORS = [("yellow", (228, 218, 0)), ("gray", (162, 162, 162)), ("green", (63, 186, 119))]
+wordle_colors = [("yellow", (228, 218, 0)), ("gray", (162, 162, 162)), ("green", (63, 186, 119))]
 logfile('log.log')
 system("> log.log")
 
